@@ -1,0 +1,10 @@
+[project]
+name = "rng-entropy-ml"
+version = "0.1.0"
+description = "Labeled RNG sequence dataset and reproducible feature engineering for machine learning"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.uv]
+package = false

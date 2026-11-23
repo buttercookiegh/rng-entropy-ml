@@ -1,0 +1,11 @@
+# uv-managed environment (do not commit)
+.venv/
+
+# Python and macOS
+__pycache__/
+*.py[cod]
+.DS_Store
+.ipynb_checkpoints/
+
+# Generated model artifacts, not the included dataset
+results/
