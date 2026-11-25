@@ -1,0 +1,42 @@
+% Compile in VS Code (LaTeX Workshop): xelatex ml_model_plan.tex
+% IEEE-inspired two-column, US Letter, 11 pt. Times New Roman is selected if
+% installed on the computer; otherwise a Times-compatible fallback is used.
+\documentclass[11pt,letterpaper,twocolumn]{article}
+\usepackage[letterpaper,top=0.63in,bottom=0.67in,left=0.65in,right=0.65in,columnsep=0.23in]{geometry}
+\usepackage{fontspec}
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{Tinos}}
+\usepackage{microtype,enumitem,titlesec,hyperref}
+\hypersetup{hidelinks}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2.3pt}
+\setlist[itemize]{leftmargin=1.3em,itemsep=1pt,topsep=2pt,parsep=0pt}
+\titlespacing*{\section}{0pt}{6pt}{2pt}
+\titleformat{\section}{\normalsize\bfseries}{\Roman{section}.}{.45em}{}
+\pagestyle{empty}
+\begin{document}
+\twocolumn[\begin{center}
+{\fontsize{14}{16}\selectfont\bfseries Machine Learning-Based Predictability and Entropy Analysis of RNG Outputs}\par
+\vspace{2pt}{\normalsize CPE 486/586: Machine Learning for Engineers --- Proposed Methods}\par
+\vspace{7pt}\end{center}]
+\section{Engineering Problem and Objective}
+Random-number generators (RNGs) are essential to cryptographic systems, simulation, and secure digital hardware. Biased or dependent outputs can compromise their reliability. The proposed engineering problem is to build a reproducible machine-learning pipeline that detects statistical differences among RNG output groups and investigates whether previous bits predict future bits. \textbf{Research question:} Can learned patterns reveal measurable structure beyond the balance of zeros and ones, and how does predictive performance relate to empirical Shannon entropy?
+
+\section{Dataset and Prediction Tasks}
+A third-party research dataset contains \textbf{6,000 labeled sequences}, each \textbf{100 bits} long, grouped into three source classes (1, 2, 3). Source-to-device mapping and physical-versus-simulated provenance are not fully verified; labels will be treated as anonymous groups. Two supervised tasks are proposed:
+\begin{itemize}
+\item \textbf{A. Source classification (main task):} Predict the three-class \texttt{source\_label} using \textbf{13 statistical features}, including one-bit frequency, run lengths, transition rate, lag correlations, pair frequencies, and block-frequency variation.
+\item \textbf{B. Next-bit prediction (extension):} Use \textbf{16 preceding bits} to predict the observed following bit (0 or 1). Each original sequence yields 84 within-sequence training examples.
+\end{itemize}
+\section{Proposed Algorithms}
+For Task A, start with a \textbf{class-prior baseline}, then compare \textbf{multinomial logistic regression} (interpretable linear decision boundaries), \textbf{RBF-kernel support vector machines} (nonlinear separation), and \textbf{random forests} (feature interactions). Standardize numerical features where appropriate. Apply \textbf{principal component analysis (PCA)} to the training features and compare models with and without components retaining 95\% of training-set variance. PCA is unsupervised; it does not use target labels.
+
+For Task B, compare a \textbf{prior-probability baseline} against \textbf{logistic regression}; optionally extend to a random forest if time permits. Predictions will be assessed on original sequences never used during training.
+
+\section{Evaluation and Visual Analysis}
+Use an 80/20 sequence-level train/test split. Fit scaling and PCA using training data only. For source classification, report \textbf{accuracy, per-class precision/recall, macro-F1, confusion matrices,} and processing time. For bit prediction, report \textbf{accuracy, F1, and probability log loss} relative to a class-prior baseline. Planned VS Code plots include class counts, bit-frequency histograms, cumulative PCA variance, PC1-versus-PC2 projections, and model comparisons.
+
+Compute empirical single-bit Shannon entropy separately from bit frequencies. \textbf{Predictive log loss is model cross-entropy, not a certified entropy estimate;} successful source classification also does not imply bit predictability. The project will report negative results and limitations rather than claim that machine learning proves randomness or cryptographic security.
+
+\section{Original Source and Reproducibility}
+The data were not collected by the student; they come from the \emph{Noise versus Randomness} / YQuantum research project: \href{https://github.com/hubertkolcz/NoiseVsRandomness}{github.com/hubertkolcz/NoiseVsRandomness}. Python, scikit-learn, pandas, matplotlib, and \texttt{uv} will reproduce preprocessing, plots, training, and evaluations in the GitHub repository.
+\end{document}
